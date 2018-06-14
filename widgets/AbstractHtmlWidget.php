@@ -27,7 +27,7 @@ abstract class AbstractHtmlWidget extends AbstractWidget implements WidgetInterf
              console.log('callback function');
              console.log(response.token);
              console.log(response.message);
-             $('#multiresponse_'+response.token).html(response.message);
+             $('#multiresponse_'+response.token).replaceWith(response.message);
 JS;
     }
 
