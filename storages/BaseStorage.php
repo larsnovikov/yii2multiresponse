@@ -32,12 +32,14 @@ class BaseStorage implements StorageInterface
 
     /**
      * Время регистрации токенов
+     *
      * @var array
      */
-    private static $registerTimes = [];
+    private static $registeredTimes = [];
 
     /**
      * Регистрация токена
+     *
      * token => Client
      * @param string $token
      * @param ConnectionInterface $client
@@ -51,6 +53,7 @@ class BaseStorage implements StorageInterface
 
     /**
      * Регистрация ответа
+     *
      * token => response
      * @param string $token
      * @param string $response
@@ -64,6 +67,7 @@ class BaseStorage implements StorageInterface
 
     /**
      * Получение объекта клиента по токену
+     *
      * @param string $token
      * @param bool $once
      * @return null|ConnectionInterface
@@ -104,11 +108,11 @@ class BaseStorage implements StorageInterface
     private static function saveRegisterTime(string $token): void
     {
         $time = time();
-        if (!array_key_exists($time, self::$registerTimes)) {
-            self::$registerTimes[$time] = [];
+        if (!array_key_exists($time, self::$registeredTimes)) {
+            self::$registeredTimes[$time] = [];
         }
 
-        self::$registerTimes[$time][] = $token;
+        self::$registeredTimes[$time][] = $token;
 
         self::collectGarbage();
     }
@@ -120,18 +124,21 @@ class BaseStorage implements StorageInterface
     {
         $deadline = time() - self::TOKEN_LIFE_TIME;
 
-        foreach (self::$registerTimes as $token => &$time) {
+        foreach (self::$registeredTimes as $time => $tokens) {
             if ($deadline > $time) {
                 break;
             }
-            if (array_key_exists($token, self::$registeredResponses)) {
-                unset(self::$registeredResponses[$token]);
-            }
-            if (array_key_exists($token, self::$registeredTokens)) {
-                unset(self::$registeredTokens[$token]);
+
+            foreach ($tokens as &$token) {
+                if (array_key_exists($token, self::$registeredResponses)) {
+                    unset(self::$registeredResponses[$token]);
+                }
+                if (array_key_exists($token, self::$registeredTokens)) {
+                    unset(self::$registeredTokens[$token]);
+                }
             }
 
-            unset(self::$registerTimes[$time]);
+            unset(self::$registeredTimes[$time]);
         }
     }
 }
