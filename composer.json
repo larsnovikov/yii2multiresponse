@@ -1,0 +1,26 @@
+{
+    "name": "larsnovikov/yii2multiresponse",
+    "description": "Multiresponse component",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension"],
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "larsnovikov",
+            "email": "larsnovikov@yandex.ru"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.0",
+        "consik/yii2-websocket": "^1.0",
+        "yiisoft/yii2-queue": "~2.0.0",
+        "enqueue/amqp-lib": "^0.8.23",
+        "textalk/websocket": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "larsnovikov\\yii2multiresponse\\": ""
+        }
+    }
+}
