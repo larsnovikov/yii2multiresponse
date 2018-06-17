@@ -167,10 +167,10 @@ abstract class AbstractWidget extends Widget
         if (!self::$wsServer instanceof Client) {
             self::$wsServer = new Client(static::getUrl());
         }
-        var_dump('send message');
+        echo "send message\r\n";
 
         self::$wsServer->send(json_encode([
-            'action' => 'chat',
+            'action' => 'registerResponse',
             'message' => $message,
             'token' => $token
         ]));

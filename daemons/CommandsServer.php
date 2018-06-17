@@ -27,9 +27,9 @@ class CommandsServer extends WebSocketServer
      * @param ConnectionInterface $client
      * @param $msg
      */
-    public function commandChat(ConnectionInterface $client, $msg): void
+    public function commandRegisterResponse(ConnectionInterface $client, $msg): void
     {
-        var_dump('register_chat.');
+        echo "register response\r\n";
         $request = json_decode($msg, true);
         /** @var Module $module */
         $module = \Yii::$app->getModule('yii2multiresponse');
@@ -39,9 +39,9 @@ class CommandsServer extends WebSocketServer
         $registeredClient = $module->storage::getClientByToken($token);
         if ($registeredClient instanceof ConnectionInterface) {
             // если токен зарегистрирован, отдадим клиенту данные
-            var_dump('send_data_to_client');
+            echo "send_data_to_client\r\n";
             $registeredClient->send( json_encode([
-                'type' => 'chat',
+                'type' => 'registerResponse',
                 'token' => $token,
                 'message' => $request['message']
             ]));
@@ -58,9 +58,9 @@ class CommandsServer extends WebSocketServer
      * @param ConnectionInterface $client
      * @param string $msg
      */
-    public function commandRegister(ConnectionInterface $client, string $msg): void
+    public function commandRegisterToken(ConnectionInterface $client, string $msg): void
     {
-        var_dump('register_client.');
+        echo "register token\r\n";
         /** @var Module $module */
         $module = \Yii::$app->getModule('yii2multiresponse');
         $request = json_decode($msg, true);
@@ -71,7 +71,7 @@ class CommandsServer extends WebSocketServer
         if ($response) {
             // для этого токена уже готов ответ, отдадим его
             $client->send( json_encode([
-                'type' => 'chat',
+                'type' => 'registerResponse',
                 'token' => $token,
                 'message' => $response
             ]));

@@ -11,7 +11,7 @@
             socket.onopen = function (e) {
                 widget.containers.forEach(function (token) {
                     console.log('register-' + token);
-                    socket.send(JSON.stringify({'action': 'register', 'token': token}));
+                    socket.send(JSON.stringify({'action': 'registerToken', 'token': token}));
                 });
             };
 
