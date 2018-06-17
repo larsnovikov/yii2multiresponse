@@ -10,7 +10,7 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-composer require larsnovikov/yii2multiresponse:^1.0
+composer require larsnovikov/yii2multiresponse
 ```
 
 or add
