@@ -57,7 +57,7 @@ Usage
 ```
 3. Добавь в конфиге в `bootstrap` название компонента очереди
 
-4. Унаследуй свой виджет от `vendor\larsnovikov\yii2multiresponse\widgets\AbstractWidget`
+4. Унаследуй свой виджет от `vendor\larsnovikov\yii2multiresponse\widgets\AbstractHtmlWidget` или `vendor\larsnovikov\yii2multiresponse\widgets\AbstractJsonWidget` в зависимости от того какой ответ от WS-сервера надо получить
 
 5. Выведи виджет, например:
 ```
