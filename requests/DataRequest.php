@@ -77,7 +77,8 @@ class DataRequest
             'view' => $this->getView(),
             'data' => $this->getData(),
             'token' => $this->getToken(),
-            'widgetClass' => $widgetClass
+            'widgetClass' => $widgetClass,
+            'url' => $widgetClass::getUrl()
         ]);
     }
 }

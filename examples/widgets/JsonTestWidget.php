@@ -30,6 +30,6 @@ class JsonTestWidget extends AbstractJsonWidget
             'time' => time()
         ]);
 
-        self::sendMessage($message, $data['token']);
+        self::sendMessage($message, $data['token'], $data['url']);
     }
 }

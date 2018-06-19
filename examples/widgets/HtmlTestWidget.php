@@ -26,6 +26,6 @@ class HtmlTestWidget extends AbstractHtmlWidget
         // TODO обработка данных
         $message = 'test widget ' . time();
 
-        self::sendMessage($message, $data['token']);
+        self::sendMessage($message, $data['token'], $data['url']);
     }
 }

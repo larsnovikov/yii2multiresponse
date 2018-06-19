@@ -23,15 +23,18 @@ abstract class AbstractWidget extends Widget
 {
     /**
      * WSServer
-     * @var Client|null
+     * @var Client[]
      */
-    private static $wsServer = null;
+    private static $wsServer = [];
 
     /**
      * Конфиг для фронтенда
      * @var array
      */
     public static $config = [];
+
+    /** @var array */
+    protected static $socketUrls = [];
 
     /**
      * @var DataRequest|null
@@ -63,17 +66,22 @@ abstract class AbstractWidget extends Widget
      */
     public static function getUrl(): string
     {
-        if (!array_key_exists(static::class, \Yii::$app->getModule('yii2multiresponse')->socketUrls)) {
-            throw new Exception('Socket url not found!');
+        if (!array_key_exists(static::class, self::$socketUrls)) {
+            if (!array_key_exists(static::class, \Yii::$app->getModule('yii2multiresponse')->socketUrls)) {
+                throw new Exception('Socket url not found!');
+            }
+            $socketServerId = random_int(0, \count(\Yii::$app->getModule('yii2multiresponse')->socketUrls[static::class]) - 1);
+            self::$socketUrls[static::class] = \Yii::$app->getModule('yii2multiresponse')->socketUrls[static::class][$socketServerId];
         }
-        return \Yii::$app->getModule('yii2multiresponse')->socketUrls[static::class];
+
+        return self::$socketUrls[static::class];
     }
 
     /**
      * @return string
      * @throws \ReflectionException
      */
-    public function run(): string
+    final public function run(): string
     {
         $this->registerAsset();
         if (!$this->dataRequest instanceof DataRequest) {
@@ -90,7 +98,7 @@ abstract class AbstractWidget extends Widget
      *
      * @return string
      */
-    public function getClassName(): string
+    final public function getClassName(): string
     {
         return (substr(static::class, strrpos(static::class, '\\') + 1));
     }
@@ -100,7 +108,7 @@ abstract class AbstractWidget extends Widget
      *
      * @throws \ReflectionException
      */
-    public function register(): void
+    final public function register(): void
     {
         // если это первая обработка виджета, создадим обработчик на добавление конфигурации
         if (self::$config === []) {
@@ -113,7 +121,7 @@ abstract class AbstractWidget extends Widget
     /**
      * Регистрация события
      */
-    public function registerEvent(): void
+    final public function registerEvent(): void
     {
         \Yii::$app->response->on(\yii\web\Response::EVENT_BEFORE_SEND, function (\yii\base\Event $event) {
             $response = $event->sender;
@@ -132,7 +140,7 @@ abstract class AbstractWidget extends Widget
      * @param string $token
      * @throws \ReflectionException
      */
-    public function registerContainer(string $token): void
+    final public function registerContainer(string $token): void
     {
         if (!array_key_exists($this->getClassName(), self::$config)) {
             // если нет данных об этом виджете, создадим
@@ -150,7 +158,7 @@ abstract class AbstractWidget extends Widget
     /**
      * Регистрация ассета
      */
-    private function registerAsset(): void
+    final private function registerAsset(): void
     {
         $this->getAsset()::register($this->getView());
     }
@@ -160,16 +168,17 @@ abstract class AbstractWidget extends Widget
      *
      * @param $message
      * @param string $token
-     * @throws \WebSocket\BadOpcodeException
+     * @param string $url
      */
-    public static function sendMessage($message, string $token): void
+    public static function sendMessage($message, string $token, string $url): void
     {
-        if (!self::$wsServer instanceof Client) {
-            self::$wsServer = new Client(static::getUrl());
+        if (!array_key_exists($url, self::$wsServer)
+            || !self::$wsServer[$url] instanceof Client) {
+            self::$wsServer[$url] = new Client($url);
         }
         echo "send message\r\n";
 
-        self::$wsServer->send(json_encode([
+        self::$wsServer[$url]->send(json_encode([
             'action' => 'registerResponse',
             'message' => $message,
             'token' => $token

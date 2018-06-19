@@ -16,7 +16,7 @@ class CommandsServer extends WebSocketServer
      * @param $msg
      * @return null|string
      */
-    protected function getCommand(ConnectionInterface $from, $msg)
+    protected function getCommand(ConnectionInterface $from, $msg): ?string
     {
         $request = json_decode($msg, true);
         return !empty($request['action']) ? $request['action'] : parent::getCommand($from, $msg);
@@ -39,7 +39,7 @@ class CommandsServer extends WebSocketServer
         $registeredClient = $module->storage::getClientByToken($token);
         if ($registeredClient instanceof ConnectionInterface) {
             // если токен зарегистрирован, отдадим клиенту данные
-            echo "send_data_to_client\r\n";
+            echo "send data to client\r\n";
             $registeredClient->send( json_encode([
                 'type' => 'registerResponse',
                 'token' => $token,

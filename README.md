@@ -32,8 +32,16 @@ Usage
     'class' => 'vendor\larsnovikov\yii2multiresponse\Module',
     'socketUrls' => [
         // TODO тут необходимо сконфигурировать пути для виджетов к WebSocket серверу
-        \vendor\larsnovikov\yii2multiresponse\examples\widgets\HtmlTestWidget::class => 'ws://socket-test.loc:5008',
-        \vendor\larsnovikov\yii2multiresponse\examples\widgets\JsonTestWidget::class => 'ws://socket-test.loc:5008'
+        \vendor\larsnovikov\yii2multiresponse\examples\widgets\HtmlTestWidget::class => [
+            'ws://socket-test.loc:5005',
+            'ws://socket-test.loc:5006', 
+            'ws://socket-test.loc:5007'
+        ],
+        \vendor\larsnovikov\yii2multiresponse\examples\widgets\JsonTestWidget::class => [
+            'ws://socket-test.loc:5005',
+            'ws://socket-test.loc:5006',
+            'ws://socket-test.loc:5007'
+        ]
     ]
 ],
 ```
