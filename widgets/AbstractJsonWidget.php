@@ -31,9 +31,9 @@ JS;
     }
 
     /**
-     * @return AssetBundle
+     * @return AssetBundle|null
      */
-    public function getAsset(): AssetBundle
+    public function getAsset(): ?AssetBundle
     {
         return new ContainerAsset;
     }

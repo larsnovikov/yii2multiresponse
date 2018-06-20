@@ -54,9 +54,9 @@ abstract class AbstractWidget extends Widget
     abstract public function getCallbackFunction(): string;
 
     /**
-     * @return AssetBundle
+     * @return AssetBundle|null
      */
-    abstract public function getAsset(): AssetBundle;
+    abstract public function getAsset(): ?AssetBundle;
 
     /**
      * Получить Url для общения с сокетом
@@ -148,7 +148,7 @@ abstract class AbstractWidget extends Widget
                 'containers' => [],
                 'url' => static::getUrl(),
                 'callback' => trim($this->getCallbackFunction()),
-                'base_asset' => $this->getAsset()::className() === ContainerAsset::class
+                'base_asset' => $this->isBaseAsset()
             ];
         }
         // добавим информацию о текущем токене
@@ -156,11 +156,27 @@ abstract class AbstractWidget extends Widget
     }
 
     /**
+     * @return bool
+     */
+    final private function isBaseAsset(): bool
+    {
+        $asset = $this->getAsset();
+        if (!$asset instanceof AssetBundle) {
+            return false;
+        }
+
+        return $asset::className() === ContainerAsset::class;
+    }
+
+    /**
      * Регистрация ассета
      */
     final private function registerAsset(): void
     {
-        $this->getAsset()::register($this->getView());
+        $asset = $this->getAsset();
+        if ($asset instanceof AssetBundle) {
+            $asset::register($this->getView());
+        }
     }
 
     /**

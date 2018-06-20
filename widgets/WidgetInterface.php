@@ -15,12 +15,6 @@ namespace vendor\larsnovikov\yii2multiresponse\widgets;
 interface WidgetInterface
 {
     /**
-     * Url для посылки запросов
-     * @return string
-     */
-    public static function getUrl(): string;
-
-    /**
      * Обработка данных в очереди
      * @param array $data
      */

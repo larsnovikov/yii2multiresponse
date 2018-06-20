@@ -30,7 +30,7 @@ class ServerController extends Controller
         });
 
         $server->on(WebSocketServer::EVENT_WEBSOCKET_OPEN, function($e) use($server) {
-            echo "Server started at port " . $server->port;
+            echo "Server started at port {$server->port} \r\n";
         });
 
         $server->start();
